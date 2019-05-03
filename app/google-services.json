@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "1044385729048",
+    "firebase_url": "https://netbank-c74db.firebaseio.com",
+    "project_id": "netbank-c74db",
+    "storage_bucket": "netbank-c74db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1044385729048:android:7d8f23524ba72669",
+        "android_client_info": {
+          "package_name": "com.example.netbank"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1044385729048-0g0l6gcfs5728o0a0b5v0speg6vapphj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.netbank",
+            "certificate_hash": "b5217c459bf9eed36270dbbb8a96c6752e479b14"
+          }
+        },
+        {
+          "client_id": "1044385729048-dp5d1phf0vdj4avbie1205tlcqa1ugko.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.netbank",
+            "certificate_hash": "c635749fe329d2db4b798c4c8010d6da8da27dbd"
+          }
+        },
+        {
+          "client_id": "1044385729048-b87aigvf88hjr8poqcs0hk4130hcbfkr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmq4kmCwzuWvBBAV3u3k1KzmQZdmYjsfs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1044385729048-b87aigvf88hjr8poqcs0hk4130hcbfkr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
