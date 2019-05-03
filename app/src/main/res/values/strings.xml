@@ -1,5 +1,14 @@
 <resources>
 
     <string name="app_name">NetBank</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="register">Register</string>
+    <string name="reset_pass">Reset password</string>
+    <string name ="repeat_pass">Repeat password</string>
+    <string name="repeat_pass_error">Passwords are not identical</string>
+    <string name="back">Back</string>
+    <string name="reset_info">An email will be sent to you, in order to reset your password</string>
 
 </resources>
