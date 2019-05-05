@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     EditText inputEmail, inputPassword, repeatPassword;
-    Button signIn, register, finishRegister, resetPassword, backLogin, finishReset;
+    Button signIn, register, finishRegister, resetPassword, backLogin, finishReset, backReset;
     ImageButton hidePassword, showPassword;
     TextView passwordText, repeatPassText, emailText, resetInfo;
 
@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        signOut();
         init();
 
         mAuth = FirebaseAuth.getInstance();
@@ -104,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void resetPassword(String emailAddress) {
+        Log.d(TAG, "resetPassword: Has been called");
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         auth.sendPasswordResetEmail(emailAddress)
@@ -120,10 +122,14 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser currentUser) {
         Log.d(TAG, "updateUI: Has been called");
 
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, AccountsActivity.class);
         if (currentUser != null) {
             startActivity(i);
         }
+    }
+
+    public void signOut(){
+        FirebaseAuth.getInstance().signOut();
     }
 
     public void onClick(View v) {
@@ -177,6 +183,17 @@ public class LoginActivity extends AppCompatActivity {
             showPassword.setVisibility(View.GONE);
             resetInfo.setVisibility(View.VISIBLE);
             finishReset.setVisibility(View.VISIBLE);
+            backReset.setVisibility(View.VISIBLE);
+        } else if (i == R.id.backReset){
+            inputPassword.setVisibility(View.VISIBLE);
+            signIn.setVisibility(View.VISIBLE);
+            register.setVisibility(View.VISIBLE);
+            resetPassword.setVisibility(View.VISIBLE);
+            hidePassword.setVisibility(View.VISIBLE);
+            showPassword.setVisibility(View.VISIBLE);
+            resetInfo.setVisibility(View.GONE);
+            finishReset.setVisibility(View.GONE);
+            backReset.setVisibility(View.GONE);
         }
     }
 
@@ -195,6 +212,7 @@ public class LoginActivity extends AppCompatActivity {
         finishRegister = findViewById(R.id.finishRegister);
         resetPassword = findViewById(R.id.resetPassword);
         finishReset = findViewById(R.id.finishReset);
+        backReset = findViewById(R.id.backReset);
 
         //ImageButtons
         hidePassword = findViewById(R.id.hidePassword);
