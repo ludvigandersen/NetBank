@@ -15,6 +15,17 @@
       },
       "oauth_client": [
         {
+<<<<<<< HEAD
+=======
+          "client_id": "1044385729048-0g0l6gcfs5728o0a0b5v0speg6vapphj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.netbank",
+            "certificate_hash": "b5217c459bf9eed36270dbbb8a96c6752e479b14"
+          }
+        },
+        {
+>>>>>>> master
           "client_id": "1044385729048-dp5d1phf0vdj4avbie1205tlcqa1ugko.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
