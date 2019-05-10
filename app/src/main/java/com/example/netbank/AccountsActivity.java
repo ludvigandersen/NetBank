@@ -34,15 +34,6 @@ public class AccountsActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -56,7 +47,7 @@ public class AccountsActivity extends AppCompatActivity
         init();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null){
+        if (user != null) {
             userEmail.setText(user.getEmail() + "");
 
         }
@@ -103,18 +94,12 @@ public class AccountsActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.sign_out) {
+        if (id == R.id.nav_accounts) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new AccountsFragment()).commit();
+        } else if (id == R.id.nav_profile) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ProfileFragment()).commit();
+        } else if (id == R.id.nav_sign_out) {
             signOut();
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -122,13 +107,13 @@ public class AccountsActivity extends AppCompatActivity
         return true;
     }
 
-    public void signOut(){
+    public void signOut() {
         Intent i = new Intent(this, LoginActivity.class);
         FirebaseAuth.getInstance().signOut();
         startActivity(i);
     }
 
-    private void init(){
+    private void init() {
 
     }
 }

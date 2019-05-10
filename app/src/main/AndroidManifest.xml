@@ -16,7 +16,7 @@
         <activity
             android:name=".AccountsActivity"
             android:label="@string/title_activity_accounts"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
