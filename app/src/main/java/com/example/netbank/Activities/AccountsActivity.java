@@ -25,6 +25,8 @@ public class AccountsActivity extends AppCompatActivity
 
     private final static String TAG = "AccountsActivity";
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     TextView userEmail;
 
     @Override
@@ -46,7 +48,7 @@ public class AccountsActivity extends AppCompatActivity
 
         init();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         if (user != null) {
             userEmail.setText(user.getEmail() + "");
 
@@ -114,6 +116,6 @@ public class AccountsActivity extends AppCompatActivity
     }
 
     private void init() {
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new AccountsFragment()).commit();
     }
 }

@@ -14,17 +14,22 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.netbank.Model.Account;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class LoginActivity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     EditText inputEmail, inputPassword, repeatPassword;
     Button signIn, register, finishRegister, resetPassword, backLogin, finishReset, backReset;
@@ -65,6 +70,13 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            createBankAccounts("Savings", 0, true, user.getEmail());
+                            createBankAccounts("Budget", 0, true, user.getEmail());
+                            createBankAccounts("Pension", 0, false, user.getEmail());
+                            createBankAccounts("Default", 0, false, user.getEmail());
+                            createBankAccounts("Business", 0, false, user.getEmail());
+
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -130,6 +142,28 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signOut(){
         FirebaseAuth.getInstance().signOut();
+    }
+
+    private void createBankAccounts(String accountType, int balance, boolean accountActive, String email){
+
+        Account account = new Account(accountType, balance, accountActive);
+
+        db.collection("users").document(email).collection("accounts").document(accountType)
+                .set(account)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
+
     }
 
     public void onClick(View v) {

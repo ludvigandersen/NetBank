@@ -122,7 +122,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void createCustomer() {
-        Customer customer = new Customer(firstName.getText().toString(), lastName.getText().toString(), mDisplayDate.getText().toString(), "test");
+        Customer customer = new Customer(firstName.getText().toString(),
+                lastName.getText().toString(),
+                mDisplayDate.getText().toString(),
+                "test");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
