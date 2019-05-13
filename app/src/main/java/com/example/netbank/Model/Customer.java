@@ -4,19 +4,19 @@ public class Customer {
 
     private String firstName;
     private String lastName;
-    private int age;
+    private String age;
     private String address;
-    private Affiliate affiliate;
+
 
     public Customer() {
     }
 
-    public Customer(String firstName, String lastName, int age, String address, Affiliate affiliate) {
+    public Customer(String firstName, String lastName, String age, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.address = address;
-        this.affiliate = affiliate;
+
     }
 
     public String getFirstName() {
@@ -35,11 +35,11 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
@@ -51,11 +51,4 @@ public class Customer {
         this.address = address;
     }
 
-    public Affiliate getAffiliate() {
-        return affiliate;
-    }
-
-    public void setAffiliate(Affiliate affiliate) {
-        this.affiliate = affiliate;
-    }
 }

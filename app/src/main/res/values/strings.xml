@@ -20,5 +20,8 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
+    <string name="set_birthday">Set birthday date</string>
+    <string name="update">Update</string>
+    <string name="display_date">%1$d - %2$d - %3$d</string>
 
 </resources>
