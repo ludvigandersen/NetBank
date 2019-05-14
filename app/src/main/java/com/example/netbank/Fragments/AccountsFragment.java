@@ -1,4 +1,4 @@
-package com.example.netbank;
+package com.example.netbank.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.netbank.Model.Account;
+import com.example.netbank.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -79,9 +80,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-
                                 Account account = document.toObject(Account.class);
-
 
                                 if (account.getAccountType().equalsIgnoreCase("Budget") && account.isAccountActive()) {
                                     budgetView.setVisibility(View.VISIBLE);

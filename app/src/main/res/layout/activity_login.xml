@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".Activities.LoginActivity">
 
     <EditText
         android:id="@+id/inputPassword"
@@ -17,9 +17,9 @@
         android:layout_marginRight="8dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
+        android:hint="@string/login_password"
         android:inputType="textPassword"
         android:padding="5dp"
-        android:text="@string/login_password"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,9 +36,9 @@
         android:layout_marginRight="8dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
+        android:hint="@string/login_email"
         android:inputType="textEmailAddress"
         android:padding="5dp"
-        android:text="@string/login_email"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,9 +107,9 @@
         android:layout_marginRight="8dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
+        android:hint="@string/repeat_pass"
         android:inputType="textPassword"
         android:padding="5dp"
-        android:text="@string/repeat_pass"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

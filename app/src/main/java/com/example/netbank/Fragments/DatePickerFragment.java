@@ -1,4 +1,4 @@
-package com.example.netbank;
+package com.example.netbank.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;

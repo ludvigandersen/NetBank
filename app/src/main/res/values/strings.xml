@@ -23,5 +23,9 @@
     <string name="set_birthday">Set birthday date</string>
     <string name="update">Update</string>
     <string name="display_date">%1$d - %2$d - %3$d</string>
+    <string name="account_display">
+        %1$s
+        Balance: %2$d
+    </string>
 
 </resources>
