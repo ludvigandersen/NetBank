@@ -45,13 +45,18 @@ public class AccountsActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         userEmail = navigationView.getHeaderView(0).findViewById(R.id.userEmail);
 
-        init();
+
+
+        if (savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new AccountsFragment()).commit();
+        }
 
 
         if (user != null) {
             userEmail.setText(user.getEmail() + "");
-
         }
+
+
 
 
     }
@@ -115,6 +120,6 @@ public class AccountsActivity extends AppCompatActivity
     }
 
     private void init() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new AccountsFragment()).commit();
+
     }
 }

@@ -72,10 +72,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            createBankAccounts("Savings", 0, true, user.getEmail());
+                            createBankAccounts("Savings", 0, false, user.getEmail());
                             createBankAccounts("Budget", 0, true, user.getEmail());
                             createBankAccounts("Pension", 0, false, user.getEmail());
-                            createBankAccounts("Default", 0, false, user.getEmail());
+                            createBankAccounts("Default", 0, true, user.getEmail());
                             createBankAccounts("Business", 0, false, user.getEmail());
 
                             updateUI(user);

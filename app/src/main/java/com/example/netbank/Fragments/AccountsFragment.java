@@ -46,26 +46,43 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         savingsView = view.findViewById(R.id.savingsView);
+        savingsView.setOnClickListener(this);
         budgetView = view.findViewById(R.id.budgetView);
+        budgetView.setOnClickListener(this);
         pensionView = view.findViewById(R.id.pensionView);
+        pensionView.setOnClickListener(this);
         defaultView = view.findViewById(R.id.defaultView);
+        defaultView.setOnClickListener(this);
         businessView = view.findViewById(R.id.businessView);
+        businessView.setOnClickListener(this);
 
         getAccounts();
-
-
     }
 
     @Override
     public void onClick(View view) {
         int i = view.getId();
 
+        SpecificAccountFragment fragment = new SpecificAccountFragment();
+        Bundle bundle = new Bundle();
 
+        if (i == R.id.savingsView) {
+            bundle.putString("accountName", getFirstWord(savingsView.getText().toString()));
+        } else if (i == R.id.budgetView) {
+            bundle.putString("accountName", getFirstWord(budgetView.getText().toString()));
+        } else if (i == R.id.pensionView) {
+            bundle.putString("accountName", getFirstWord(pensionView.getText().toString()));
+        }else if (i == R.id.defaultView) {
+            bundle.putString("accountName", getFirstWord(defaultView.getText().toString()));
+        }else if (i == R.id.businessView) {
+            bundle.putString("accountName", getFirstWord(businessView.getText().toString()));
+        }
+
+        fragment.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 
     private void init() {
-
-        getAccounts();
 
     }
 
@@ -85,18 +102,23 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
                                 if (account.getAccountType().equalsIgnoreCase("Budget") && account.isAccountActive()) {
                                     budgetView.setVisibility(View.VISIBLE);
                                     budgetView.setText(getString(R.string.account_display, account.getAccountType(), account.getBalance()));
+                                    budgetView.setTextSize(20);
                                 } else if (account.getAccountType().equalsIgnoreCase("Business") && account.isAccountActive()) {
                                     businessView.setVisibility(View.VISIBLE);
                                     businessView.setText(getString(R.string.account_display, account.getAccountType(), account.getBalance()));
+                                    businessView.setTextSize(20);
                                 } else if (account.getAccountType().equalsIgnoreCase("Default") && account.isAccountActive()) {
                                     defaultView.setVisibility(View.VISIBLE);
                                     defaultView.setText(getString(R.string.account_display, account.getAccountType(), account.getBalance()));
+                                    defaultView.setTextSize(20);
                                 } else if (account.getAccountType().equalsIgnoreCase("Pension") && account.isAccountActive()) {
                                     pensionView.setVisibility(View.VISIBLE);
                                     pensionView.setText(getString(R.string.account_display, account.getAccountType(), account.getBalance()));
+                                    pensionView.setTextSize(20);
                                 } else if (account.getAccountType().equalsIgnoreCase("Savings") && account.isAccountActive()) {
                                     savingsView.setVisibility(View.VISIBLE);
                                     savingsView.setText(getString(R.string.account_display, account.getAccountType(), account.getBalance()));
+                                    savingsView.setTextSize(20);
                                 }
 
                                 Log.d(TAG, document.getId() + " => " + document.getData());
@@ -107,6 +129,15 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
+    }
+
+    private String getFirstWord(String text) {
+        int index = text.indexOf(' ');
+        if (index > -1) { // Check if there is more than one word.
+            return text.substring(0, index); // Extract first word.
+        } else {
+            return text; // Text is the first word itself.
+        }
     }
 
 

@@ -1,6 +1,7 @@
 <resources>
 
     <string name="app_name">NetBank</string>
+    <string name="real_app_name">Banken til folket</string>
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
     <string name="sign_in">Sign in</string>
@@ -24,8 +25,17 @@
     <string name="update">Update</string>
     <string name="display_date">%1$d - %2$d - %3$d</string>
     <string name="account_display">
-        %1$s
+        %1$s \n \n
         Balance: %2$d
     </string>
-
+    <string name="placeholder_balance_display">%1$d</string>
+    <string name="placeholder_account_display">%1$s Account</string>
+    <string name="transaction">Make transaction</string>
+    <string name="transaction_amount">amount</string>
+    <string name="finish_transaction">Make transaction</string>
+    <string name="verification_text">
+       Verification is required to transfer money to your own pension account
+        or to another user \n
+       Enter password to verify
+    </string>
 </resources>
