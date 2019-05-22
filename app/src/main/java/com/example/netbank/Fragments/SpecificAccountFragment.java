@@ -48,6 +48,8 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+    final static String TAG = "SpecificAccountFragment";
+
     TextView tvAccountName, tvAccountBalance;
     EditText transactionAmount, customRecipient;
     Spinner accountsSpinner;
@@ -130,7 +132,7 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
 
 
     private void getAccount() {
-
+        Log.d(TAG, "getAccount: Has been called");
         DocumentReference docRef = db.collection("users").document(user.getEmail())
                 .collection("accounts").document(getFirstWord(tvAccountName.getText().toString()));
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -202,7 +204,7 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
     }
 
     private void makeTransaction() {
-
+        Log.d(TAG, "makeTransaction: Has been called");
         final DocumentReference senderDocRef = db.collection("users").document(user.getEmail())
                 .collection("accounts").document(getFirstWord(tvAccountName.getText().toString()));
 
@@ -243,6 +245,7 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
     }
 
     private void makeCustomTransaction() {
+        Log.d(TAG, "makeCustomTransaction: Has been called");
         final DocumentReference senderDocRef = db.collection("users").document(user.getEmail())
                 .collection("accounts").document(getFirstWord(tvAccountName.getText().toString()));
 
@@ -285,6 +288,7 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
     }
 
     public void verificationDialog(final String transactionType) {
+        Log.d(TAG, "verificationDialog: Has been called");
         Log.d(TAG, "verificationDialog: Has been called");
         final EditText passVerification = new EditText(getActivity());
 

@@ -9,9 +9,14 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Accounts" />
         <item
+            android:id="@+id/nav_bills"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Bills" />
+        <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Profile" />
+
 
     </group>
 

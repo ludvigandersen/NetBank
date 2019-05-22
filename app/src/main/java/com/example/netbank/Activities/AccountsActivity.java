@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.netbank.Fragments.AccountsFragment;
+import com.example.netbank.Fragments.BillsFragment;
 import com.example.netbank.Fragments.ProfileFragment;
 import com.example.netbank.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -104,6 +105,8 @@ public class AccountsActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new AccountsFragment()).commit();
         } else if (id == R.id.nav_profile) {
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ProfileFragment()).commit();
+        } else if ( id == R.id.nav_bills){
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new BillsFragment()).commit();
         } else if (id == R.id.nav_sign_out) {
             signOut();
         }
@@ -119,7 +122,9 @@ public class AccountsActivity extends AppCompatActivity
         startActivity(i);
     }
 
-    private void init() {
+    //TODO: Create method that automatically pays bills of current user, where automatic = true, maybe set bill to recurring at creation?
+    private void payAutomaticBills(){
+
 
     }
 }

@@ -31,6 +31,8 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+    final static String TAG = "AccountsFragment";
+
     TextView savingsView, budgetView, pensionView, defaultView, businessView;
 
 
@@ -87,7 +89,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getAccounts() {
-
+        Log.d(TAG, "getAccounts: Has been called");
         db.collection("users").document(user.getEmail()).collection("accounts")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
