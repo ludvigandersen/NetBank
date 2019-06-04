@@ -13,6 +13,6 @@ Features include:
 
 
 Available user for testing:
-user: test@test.com
-pass: test1234
+user: test@test.com \n
+pass: test1234 \n
 You can also sign up with your own account
