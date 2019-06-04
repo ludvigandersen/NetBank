@@ -1,7 +1,7 @@
 # NetBank
 Android App eksamenprojekt, 4. semester
 
-This is a project with typical functionality from an online bank has been implemented.
+This is a project with typical functionality from an online bank implemented.
 
 Features include:
  - See the balance of your associated accounts
