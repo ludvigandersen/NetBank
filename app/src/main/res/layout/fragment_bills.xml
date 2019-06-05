@@ -71,4 +71,14 @@
         app:layout_constraintTop_toBottomOf="@+id/accountSpinner"
         tools:text="Account balance" />
 
+    <Switch
+        android:id="@+id/autoSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="41dp"
+        android:layout_marginLeft="41dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/accountBalance"
+        app:layout_constraintTop_toBottomOf="@+id/accountSpinner" />
+
 </android.support.constraint.ConstraintLayout>
