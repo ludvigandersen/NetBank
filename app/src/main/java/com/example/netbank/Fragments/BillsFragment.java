@@ -46,7 +46,7 @@ public class BillsFragment extends Fragment implements View.OnClickListener {
 
     final static String TAG = "BillsFragment";
 
-    TextView billText, accountBalance;
+    TextView billText, accountBalance, billDesc, billAmount, autoText;
     Spinner billsSpinner, accountSpinner;
     Button payBill;
     Switch autoSwitch;
@@ -62,7 +62,10 @@ public class BillsFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         billText = view.findViewById(R.id.billText);
-        accountBalance = view.findViewById(R.id.accountBalance);
+        //accountBalance = view.findViewById(R.id.accountBalance);
+        billDesc = view.findViewById(R.id.billDesc);
+        autoText = view.findViewById(R.id.autoText);
+        billAmount = view.findViewById(R.id.billAmount);
 
         payBill = view.findViewById(R.id.payBill);
         payBill.setOnClickListener(this);
@@ -82,11 +85,11 @@ public class BillsFragment extends Fragment implements View.OnClickListener {
         Log.d(TAG, "onClick: Has been called");
         int i = v.getId();
 
-        if (i == R.id.payBill) {
+        if (i == R.id.payBill && billsSpinner.getSelectedItem() != null) {
             String acc = accountSpinner.getSelectedItem().toString();
             String balance = acc.substring(acc.lastIndexOf(" ") + 1);
 
-            String bill = billText.getText().toString();
+            String bill = billAmount.getText().toString();
             String amount = bill.substring(bill.lastIndexOf(" ") + 1);
             if (Integer.valueOf(balance) >= Integer.valueOf(amount)) {
                 payBill();
@@ -96,7 +99,9 @@ public class BillsFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "Insufficient funds on account",
                         Toast.LENGTH_SHORT).show();
             }
-
+        } else {
+            Toast.makeText(getActivity(), "No bill selected",
+                    Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -143,12 +148,16 @@ public class BillsFragment extends Fragment implements View.OnClickListener {
 
                                             if(documentSnapshot.getString("recurring") == null){
                                                 autoSwitch.setVisibility(View.GONE);
+                                                autoText.setVisibility(View.GONE);
+
                                             } else {
                                                 autoSwitch.setVisibility(View.VISIBLE);
+                                                autoText.setVisibility(View.VISIBLE);
                                             }
 
-                                            billText.setText(getString(R.string.placeholder_bill_display, "Boligforeningen", documentSnapshot.getString("info"),
-                                                    documentSnapshot.getLong("amount").intValue()));
+                                            billText.setText(getString(R.string.placeholder_bill_display, "Boligforeningen"));
+                                            billDesc.setText(documentSnapshot.getString("info"));
+                                            billAmount.setText(getString(R.string.bill_amount,documentSnapshot.getLong("amount").intValue()));
 
                                         }
                                     });

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.netbank.Model.Account;
+import com.example.netbank.Model.TransactionParcelable;
 import com.example.netbank.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -212,6 +213,8 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
                 .collection("accounts").document(accountsSpinner.getSelectedItem().toString());
 
         db.runTransaction(new Transaction.Function<Void>() {
+            TransactionParcelable tp = new TransactionParcelable();
+
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
                 DocumentSnapshot sender = transaction.get(senderDocRef);
@@ -224,6 +227,14 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
 
                 transaction.update(senderDocRef, "balance", senderBalance - transactionBalance);
                 transaction.update(recieverDocRef, "balance", recieverBalance + transactionBalance);
+
+
+                AccountsFragment fragment = new AccountsFragment();
+                Bundle bundle = new Bundle();
+                tp.setConfirm("transaction");
+                bundle.putParcelable("transaction", tp);
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
 
 
                 // Success
@@ -328,9 +339,7 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
                             }
                         });
 
-
                 dialog.cancel();
-
             }
         });
 

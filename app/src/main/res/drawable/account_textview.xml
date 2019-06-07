@@ -11,4 +11,11 @@
         android:topLeftRadius="12dp"
         android:topRightRadius="12dp"></corners>
 
+    <gradient
+        android:angle="135"
+        android:centerColor="@color/colorField"
+        android:endColor="@color/account_top"
+        android:startColor="@color/titleColor"
+        android:type="linear" />
+
 </shape>

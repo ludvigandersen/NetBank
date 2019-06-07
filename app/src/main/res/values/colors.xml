@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorBackground">#FCFBEB</color>
-    <color name="colorField">#49191B</color>
-    <color name="titleColor">#4F0915</color>
+    <color name="colorField">#238DBE</color>
+    <color name="titleColor">#238DBE</color>
+    <color name="account_top">#80C2E6</color>
+    <color name="title_color">#FFFFFF</color>
 </resources>

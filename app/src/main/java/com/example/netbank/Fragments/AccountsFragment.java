@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.netbank.Model.Account;
+import com.example.netbank.Model.TransactionParcelable;
 import com.example.netbank.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,12 +42,22 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_accounts, container, false);
+
     }
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null){
+            TransactionParcelable check = bundle.getParcelable("transaction");
+            if (check.getConfirm().equalsIgnoreCase("transaction")){
+                Toast.makeText(getActivity(), "Transaction succesfull",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
 
         savingsView = view.findViewById(R.id.savingsView);
         savingsView.setOnClickListener(this);
@@ -79,6 +91,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
         }else if (i == R.id.businessView) {
             bundle.putString("accountName", getFirstWord(businessView.getText().toString()));
         }
+
 
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();

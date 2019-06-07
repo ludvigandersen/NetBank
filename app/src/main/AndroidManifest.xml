@@ -15,10 +15,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Activities.AccountsActivity"
-            android:label="@string/title_activity_accounts"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/real_app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Activities.MainActivity" />
-        <activity android:name=".Activities.LoginActivity">
+        <activity android:name=".Activities.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
