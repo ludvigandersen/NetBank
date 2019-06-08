@@ -16,3 +16,5 @@ Available user for testing: <br>
 user: test@test.com <br>
 pass: test1234 <br>
 You can also sign up with your own account
+
+Forbindelse til internettet er nødvendigt
