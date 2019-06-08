@@ -1,9 +1,11 @@
 package com.example.netbank.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -25,6 +27,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.w3c.dom.Text;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     Button signIn, register, finishRegister, resetPassword, backLogin, finishReset, backReset;
     ImageButton hidePassword, showPassword;
     TextView passwordText, repeatPassText, emailText, resetInfo;
+    ProgressDialog progressDialog;
 
     private static final String TAG = "LoginActivity";
 
@@ -44,6 +49,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
 
         signOut();
         init();
@@ -137,15 +145,16 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent i = new Intent(this, AccountsActivity.class);
         if (currentUser != null) {
+            progressDialog.show();
             startActivity(i);
         }
     }
 
-    public void signOut(){
+    public void signOut() {
         FirebaseAuth.getInstance().signOut();
     }
 
-    private void createBankAccounts(String accountType, int balance, boolean accountActive, String email){
+    private void createBankAccounts(String accountType, int balance, boolean accountActive, String email) {
 
         Account account = new Account(accountType, balance, accountActive);
 
@@ -171,7 +180,14 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "onClick: Has been called");
         int i = v.getId();
         if (i == R.id.signIn) {
-            signIn(inputEmail.getText().toString(), inputPassword.getText().toString());
+            if (TextUtils.isEmpty(inputEmail.getText())) {
+                inputEmail.setError("No email given");
+            } else if (TextUtils.isEmpty(inputPassword.getText())) {
+                inputPassword.setError("No password given");
+            } else {
+                progressDialog.show();
+                signIn(inputEmail.getText().toString(), inputPassword.getText().toString());
+            }
 
         } else if (i == R.id.register) {
             register.setVisibility(View.GONE);
@@ -182,14 +198,27 @@ public class LoginActivity extends AppCompatActivity {
             backLogin.setVisibility(View.VISIBLE);
 
         } else if (i == R.id.finishRegister) {
-            if (inputPassword.getText().toString().equalsIgnoreCase(repeatPassword.getText().toString())) {
+            if (TextUtils.isEmpty(inputEmail.getText())) {
+                inputEmail.setError("No email given");
+
+            } else if (TextUtils.isEmpty(inputPassword.getText())) {
+                inputPassword.setError("No password given");
+            } else if (TextUtils.isEmpty(repeatPassword.getText())) {
+                repeatPassword.setError("No password given");
+            } else if (inputPassword.getText().toString().equalsIgnoreCase(repeatPassword.getText().toString())) {
                 createAccount(inputEmail.getText().toString(), inputPassword.getText().toString());
             } else {
+                inputPassword.setError("Passwords are not identical");
                 repeatPassword.setError(getString(R.string.repeat_pass_error));
             }
 
         } else if (i == R.id.finishReset) {
+            if (TextUtils.isEmpty(inputEmail.getText())) {
+                inputEmail.setError("No email given");
+            } else {
                 resetPassword(inputEmail.getText().toString());
+            }
+
 
         } else if (i == R.id.hidePassword) {
             inputPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
@@ -219,7 +248,7 @@ public class LoginActivity extends AppCompatActivity {
             resetInfo.setVisibility(View.VISIBLE);
             finishReset.setVisibility(View.VISIBLE);
             backReset.setVisibility(View.VISIBLE);
-        } else if (i == R.id.backReset){
+        } else if (i == R.id.backReset) {
             inputPassword.setVisibility(View.VISIBLE);
             signIn.setVisibility(View.VISIBLE);
             register.setVisibility(View.VISIBLE);

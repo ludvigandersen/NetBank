@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class TransactionParcelable implements Parcelable {
 
-    public String confirm;
+    private String confirm;
 
     public TransactionParcelable() {
     }

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.netbank.Model.Account;
+import com.example.netbank.Model.TransactionParcelable;
 import com.example.netbank.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -93,8 +94,6 @@ public class BillsFragment extends Fragment implements View.OnClickListener {
             String amount = bill.substring(bill.lastIndexOf(" ") + 1);
             if (Integer.valueOf(balance) >= Integer.valueOf(amount)) {
                 payBill();
-                Toast.makeText(getActivity(), "Payment successful",
-                        Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "Insufficient funds on account",
                         Toast.LENGTH_SHORT).show();
@@ -273,8 +272,14 @@ public class BillsFragment extends Fragment implements View.OnClickListener {
                 } else {
                     transaction.update(billDocRef, "amount", 0);
                 }
+                TransactionParcelable tp = new TransactionParcelable();
 
-
+                AccountsFragment fragment = new AccountsFragment();
+                Bundle bundle = new Bundle();
+                tp.setConfirm("billPayment");
+                bundle.putParcelable("transaction", tp);
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
                 // Success
                 return null;
             }

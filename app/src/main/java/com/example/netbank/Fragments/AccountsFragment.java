@@ -56,6 +56,9 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
             if (check.getConfirm().equalsIgnoreCase("transaction")){
                 Toast.makeText(getActivity(), "Transaction succesfull",
                         Toast.LENGTH_SHORT).show();
+            } else if (check.getConfirm().equalsIgnoreCase("billPayment")){
+                Toast.makeText(getActivity(), "Bill payment succesfull",
+                        Toast.LENGTH_SHORT).show();
             }
         }
 
