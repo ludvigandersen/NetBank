@@ -45,6 +45,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
+    /**
+     Instantiates my view elements and sets onClickListeners after onCreateView() has been called
+     * */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -106,6 +109,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     };
 
+    /**
+     gets the age of a person based on input given from the datepicker
+     * */
     private String getAge(int year, int month, int day) {
         Calendar dob = Calendar.getInstance();
         Calendar today = Calendar.getInstance();

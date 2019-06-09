@@ -1,5 +1,7 @@
 package com.example.netbank.Fragments;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -43,6 +45,7 @@ import java.lang.Math;
 
 
 import static android.support.constraint.Constraints.TAG;
+import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
 public class SpecificAccountFragment extends Fragment implements View.OnClickListener {
 
@@ -55,6 +58,9 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
     EditText transactionAmount, customRecipient;
     Spinner accountsSpinner;
     Button makeTransaction, customTransaction;
+
+
+    TransactionParcelable tp = new TransactionParcelable();
 
 
     @Nullable
@@ -93,6 +99,12 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
 
     }
 
+
+    /**
+     * onClick method for performing different actions in the fragment.
+     * Validates that all required fields are given before performing the actions so no errors occur.
+     * Also makes sure that the sender has enough money on the account for the transaction.
+     */
     @Override
     public void onClick(View view) {
         int i = view.getId();
@@ -129,9 +141,14 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
                         Toast.LENGTH_SHORT).show();
             }
         }
+
+
     }
 
 
+    /**
+     * Gets the accountName of the account chosen, and retrieves the data for it from the database.
+     */
     private void getAccount() {
         Log.d(TAG, "getAccount: Has been called");
         DocumentReference docRef = db.collection("users").document(user.getEmail())
@@ -148,6 +165,10 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
         });
     }
 
+    /**
+     * Sets up the spinner the consits of the possible recipients of the transaction.
+     * Can either be to the users own accounts that are active, or custom recipient (Other users)
+     */
     private void spinnerSetup() {
 
         db.collection("users").document(user.getEmail()).collection("accounts")
@@ -204,6 +225,12 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
 
     }
 
+    /**
+     * Method used when making a transaction to the users own accounts.
+     * Creates path based on the item selected on the spinner.
+     * Path to bot the sender and receiver.
+     * Directs the user to the accounts page after the transaction has been made.
+     */
     private void makeTransaction() {
         Log.d(TAG, "makeTransaction: Has been called");
         final DocumentReference senderDocRef = db.collection("users").document(user.getEmail())
@@ -213,10 +240,11 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
                 .collection("accounts").document(accountsSpinner.getSelectedItem().toString());
 
         db.runTransaction(new Transaction.Function<Void>() {
-            TransactionParcelable tp = new TransactionParcelable();
+
 
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                makeTransaction.setOnClickListener(null);
                 DocumentSnapshot sender = transaction.get(senderDocRef);
                 DocumentSnapshot reciever = transaction.get(recieverDocRef);
 
@@ -228,7 +256,6 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
                 transaction.update(senderDocRef, "balance", senderBalance - transactionBalance);
                 transaction.update(recieverDocRef, "balance", recieverBalance + transactionBalance);
 
-
                 AccountsFragment fragment = new AccountsFragment();
                 Bundle bundle = new Bundle();
                 tp.setConfirm("transaction");
@@ -236,25 +263,32 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-
                 // Success
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+
+
                 Log.d(TAG, "Transaction success!");
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+
                         Log.w(TAG, "Transaction failure.", e);
                     }
                 });
 
     }
 
+    /**
+     * Method used when making a transaction to a different user.
+     * Used in the verificationDialog() method, to verify the user who is making a transaction.
+     * //TODO: receiving account is always set to default, make spinner consisting of other account for more choices
+     */
     private void makeCustomTransaction() {
         Log.d(TAG, "makeCustomTransaction: Has been called");
         final DocumentReference senderDocRef = db.collection("users").document(user.getEmail())
@@ -262,10 +296,11 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
 
         final DocumentReference recieverDocRef = db.collection("users").document(customRecipient.getText().toString())
                 .collection("accounts").document("Default");
-
+        customTransaction.setOnClickListener(null);
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+
                 DocumentSnapshot sender = transaction.get(senderDocRef);
                 DocumentSnapshot reciever = transaction.get(recieverDocRef);
 
@@ -285,12 +320,21 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+
+                AccountsFragment fragment = new AccountsFragment();
+                Bundle bundle = new Bundle();
+                tp.setConfirm("transaction");
+                bundle.putParcelable("transaction", tp);
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
+
                 Log.d(TAG, "Transaction success!");
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+
                         Log.w(TAG, "Transaction failure.", e);
                     }
                 });
@@ -298,11 +342,13 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
 
     }
 
+    /**
+     * Method used in case of making a custom transaction or making a transaction to the pension account.
+     * Uses firebase reauthentication method, where the user is verified when entering the correct password.
+     */
     public void verificationDialog(final String transactionType) {
         Log.d(TAG, "verificationDialog: Has been called");
-        Log.d(TAG, "verificationDialog: Has been called");
         final EditText passVerification = new EditText(getActivity());
-
 
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_DayNight_Dialog_Alert);
         alert.setTitle("Verification");
@@ -312,6 +358,7 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
         alert.setMessage(R.string.verification_text).setPositiveButton("Done", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
 
                 if (passVerification.getText().toString().equalsIgnoreCase("")) {
                     passVerification.setText(" ");
@@ -324,7 +371,9 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
+
                                     if (transactionType.equalsIgnoreCase("custom")) {
+
                                         makeCustomTransaction();
                                     } else if (transactionType.equalsIgnoreCase("pension")) {
                                         makeTransaction();
@@ -338,6 +387,7 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
 
                             }
                         });
+
 
                 dialog.cancel();
             }

@@ -1,5 +1,6 @@
 package com.example.netbank.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,14 +19,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static android.support.constraint.Constraints.TAG;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AccountsFragment extends Fragment implements View.OnClickListener {
@@ -46,17 +47,22 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    /**
+     * Method called after onCreateView() in a fragment, here i instantiate the different view elements,
+     * and set onClickListeners as i would do in onCreate() in an activity
+     * A toast will appear based on data given from another fragment
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = this.getArguments();
-        if (bundle != null){
+        if (bundle != null) {
             TransactionParcelable check = bundle.getParcelable("transaction");
-            if (check.getConfirm().equalsIgnoreCase("transaction")){
+            if (check.getConfirm().equalsIgnoreCase("transaction")) {
                 Toast.makeText(getActivity(), "Transaction succesfull",
                         Toast.LENGTH_SHORT).show();
-            } else if (check.getConfirm().equalsIgnoreCase("billPayment")){
+            } else if (check.getConfirm().equalsIgnoreCase("billPayment")) {
                 Toast.makeText(getActivity(), "Bill payment succesfull",
                         Toast.LENGTH_SHORT).show();
             }
@@ -74,6 +80,22 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
         businessView.setOnClickListener(this);
 
         getAccounts();
+
+        updateAccounts();
+
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach: Has been called " + context);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: has been called " + getContext());
     }
 
     @Override
@@ -89,9 +111,9 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
             bundle.putString("accountName", getFirstWord(budgetView.getText().toString()));
         } else if (i == R.id.pensionView) {
             bundle.putString("accountName", getFirstWord(pensionView.getText().toString()));
-        }else if (i == R.id.defaultView) {
+        } else if (i == R.id.defaultView) {
             bundle.putString("accountName", getFirstWord(defaultView.getText().toString()));
-        }else if (i == R.id.businessView) {
+        } else if (i == R.id.businessView) {
             bundle.putString("accountName", getFirstWord(businessView.getText().toString()));
         }
 
@@ -100,10 +122,10 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
         getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 
-    private void init() {
-
-    }
-
+    /**
+     * Retrieves all accounts of the user that are currently active based on the AccountActive boolean
+     * //TODO: Pension account needs to check if the user is over 77 years old
+     */
     private void getAccounts() {
         Log.d(TAG, "getAccounts: Has been called");
         db.collection("users").document(user.getEmail()).collection("accounts")
@@ -139,8 +161,11 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
                                     savingsView.setTextSize(20);
                                 }
 
+
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
+
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -149,6 +174,62 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach: Has been called 123456789");
+    }
+
+    private void updateAccounts() {
+        Log.d(TAG, "updateAccounts: Has been called" + getContext());
+        db.collection("users").document(user.getEmail()).collection("accounts")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        List<Integer> accounts = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("balance") != null) {
+                                accounts.add(doc.getLong("balance").intValue());
+                                try{
+                                if (doc.getId().equalsIgnoreCase("Budget")) {
+                                    budgetView.setText(getString(R.string.account_display, doc.getString("accountType"), doc.getLong("balance").intValue()));
+
+                                } else if (doc.getId().equalsIgnoreCase("Default")) {
+                                    defaultView.setText(getString(R.string.account_display, doc.getString("accountType"), doc.getLong("balance").intValue()));
+
+                                } else if (doc.getId().equalsIgnoreCase("Business")) {
+                                    businessView.setText(getString(R.string.account_display, doc.getString("accountType"), doc.getLong("balance").intValue()));
+
+                                } else if (doc.getId().equalsIgnoreCase("Pension")) {
+                                    pensionView.setText(getString(R.string.account_display, doc.getString("accountType"), doc.getLong("balance").intValue()));
+
+                                } else if (doc.getId().equalsIgnoreCase("Savings")) {
+                                    savingsView.setText(getString(R.string.account_display, doc.getString("accountType"), doc.getLong("balance").intValue()));
+
+                                } else {
+                                    Log.d(TAG, "onEvent: 1234523549234+0923");
+                                }
+                            } catch (IllegalStateException ex){
+                                    Log.d(TAG, "onEvent: State exception " + ex);
+                                }
+                            }
+                        }
+                        Log.d(TAG, "Current accounts: " + accounts);
+                        Log.d(TAG, "updateAccounts: Her er din context" + getContext());
+                    }
+                });
+
+    }
+
+    /**
+     * Method used for getting the first word of a string
+     */
     private String getFirstWord(String text) {
         int index = text.indexOf(' ');
         if (index > -1) { // Check if there is more than one word.

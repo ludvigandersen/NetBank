@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
 
-        signOut();
+
         init();
 
         mAuth = FirebaseAuth.getInstance();
@@ -109,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            progressDialog.show();
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
@@ -117,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                             updateUI(null);
                         }
 
@@ -145,7 +147,6 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent i = new Intent(this, AccountsActivity.class);
         if (currentUser != null) {
-            progressDialog.show();
             startActivity(i);
         }
     }

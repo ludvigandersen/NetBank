@@ -97,7 +97,7 @@ public class AccountsActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.accounts, menu);
         return true;
     }
-
+    /*
     //Skal umiddelbart ikke bruges
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -113,7 +113,7 @@ public class AccountsActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-
+    */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -141,7 +141,9 @@ public class AccountsActivity extends AppCompatActivity
         startActivity(i);
     }
 
-    //TODO: Create method that automatically pays bills of current user, where automatic = true, maybe set bill to recurring at creation?
+    /**
+     Calls the automaticPayment method on bills whose date is today, and has automatic set to true
+     **/
     private void payAutomaticBills() {
 
         Date date = new Date();
@@ -172,6 +174,10 @@ public class AccountsActivity extends AppCompatActivity
 
     }
 
+    /**
+     Make a transaction between the company and the customer and sets the date to one month ahead.
+     Is called in the payAutomaticBills() method
+     * */
     private void automaticPayment(String accountName, String reciever, String billName, final int amount, String date) {
         Log.d(TAG, "makeTransaction: Has been called");
         final DocumentReference senderDocRef = db.collection("users").document(user.getEmail())
