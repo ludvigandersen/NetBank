@@ -157,6 +157,10 @@ public class AccountsActivity extends AppCompatActivity
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
+                                if (document.getBoolean("isPaid")){
+                                    updateIsPaid(document.getId());
+                                }
+
                                 if (document.getBoolean("automatic")) {
                                     automaticPayment(document.getString("fromAccount"),
                                             "boligforeningen", document.getId(), document.getLong("amount").intValue(), document.getString("recurring"));
@@ -199,19 +203,22 @@ public class AccountsActivity extends AppCompatActivity
                 int recieverBalance = reciever.getLong("amount").intValue();
                 int transactionBalance = Math.abs(amount);
 
-                transaction.update(senderDocRef, "balance", senderBalance - transactionBalance);
-                transaction.update(recieverDocRef, "amount", recieverBalance + transactionBalance);
-                transaction.update(billDocRef, "isPaid", true);
+                if (senderBalance >= transactionBalance) {
+                    transaction.update(senderDocRef, "balance", senderBalance - transactionBalance);
+                    transaction.update(recieverDocRef, "amount", recieverBalance + transactionBalance);
+                    transaction.update(billDocRef, "isPaid", true);
 
 
-                SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
-                Date newDate = new Date();
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(newDate);
-                cal.add(Calendar.MONTH, 1);
-                newDate = cal.getTime();
-                transaction.update(billDocRef, "recurring", dateformat.format(newDate));
-
+                    SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
+                    Date newDate = new Date();
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(newDate);
+                    cal.add(Calendar.MONTH, 1);
+                    newDate = cal.getTime();
+                    transaction.update(billDocRef, "recurring", dateformat.format(newDate));
+                } else {
+                    Log.d(TAG, "apply: Transaction ikke fuldført");
+                }
 
                 // Success
                 return null;
@@ -229,6 +236,27 @@ public class AccountsActivity extends AppCompatActivity
                     }
                 });
 
+    }
+
+    private void updateIsPaid(String docId){
+
+
+
+        db.collection("companies").document("boligforeningen").collection("customer")
+                .document(user.getEmail()).collection("bills").document(docId)
+                .update("isPaid", false)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
 
 }

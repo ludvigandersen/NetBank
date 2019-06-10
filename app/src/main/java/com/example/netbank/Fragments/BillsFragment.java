@@ -260,8 +260,12 @@ public class BillsFragment extends Fragment implements View.OnClickListener {
                 transaction.update(billDocRef, "isPaid", true);
                 transaction.update(billDocRef, "fromAccount", getFirstWord(accountSpinner.getSelectedItem().toString()));
 
-                if (autoSwitch.isChecked()){
-                    transaction.update(billDocRef, "automatic", true);
+                if (autoSwitch.getVisibility() == View.VISIBLE){
+                    if (autoSwitch.isChecked()){
+                        transaction.update(billDocRef, "automatic", true);
+                    } else {
+                        transaction.update(billDocRef, "automatic", false);
+                    }
                     SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
                     Date newDate = new Date();
                     Calendar cal = Calendar.getInstance();
@@ -269,7 +273,9 @@ public class BillsFragment extends Fragment implements View.OnClickListener {
                     cal.add(Calendar.MONTH, 1);
                     newDate = cal.getTime();
                     transaction.update(billDocRef, "recurring", dateformat.format(newDate));
-                } else {
+                } else if (!autoSwitch.isChecked() && autoSwitch.getVisibility() == View.VISIBLE){
+                    transaction.update(billDocRef, "automatic", false);
+                }else {
                     transaction.update(billDocRef, "amount", 0);
                 }
                 TransactionParcelable tp = new TransactionParcelable();
