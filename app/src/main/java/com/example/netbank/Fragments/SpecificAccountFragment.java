@@ -183,14 +183,14 @@ public class SpecificAccountFragment extends Fragment implements View.OnClickLis
 
                                 Account account = document.toObject(Account.class);
 
+                                if(!account.getAccountType().equalsIgnoreCase(getFirstWord(tvAccountName.getText().toString()))) {
+                                    if (account.isAccountActive() != account.getAccountType().equalsIgnoreCase(getFirstWord(tvAccountName.getText().toString()))) {
+                                        accountList.add(account.getAccountType());
+                                    } else if (account.getAccountType().equalsIgnoreCase("Pension")) {
+                                        accountList.add(account.getAccountType());
+                                    }
 
-                                if (account.isAccountActive() != account.getAccountType().equalsIgnoreCase(getFirstWord(tvAccountName.getText().toString()))) {
-                                    accountList.add(account.getAccountType());
-                                } else if (account.getAccountType().equalsIgnoreCase("Pension")) {
-                                    accountList.add(account.getAccountType());
                                 }
-
-
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
                             accountList.add("Custom recipient");
